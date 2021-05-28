@@ -15,7 +15,7 @@ func veHCN() {
     print("Mời nhập số cột:", terminator: " ")
     let cotStr = readLine()
     
-    guard let hangStr = hangStr, let cotStr = cotStr, let hang = Int(hangStr), let cot = Int(cotStr) else {
+    guard let hangStrNew = hangStr, let cotStrNew = cotStr, let hang = Int(hangStrNew), let cot = Int(cotStrNew) else {
         return
     }
     for i in 1...hang {
@@ -45,6 +45,69 @@ func isLeapYear(_ year:Int) -> Bool {
     return false
 }
 
+func soNgayTrongThang(_ month:Int, _ year:Int) -> Int{
+    switch month {
+    case 1, 3, 5, 7, 8, 10, 12:
+        return 31
+    case 4, 6, 9, 11:
+        return 30
+    default:
+        if isLeapYear(year) {
+            return 29
+        }
+        return 28
+    }
+}
+
+func hopLe(_ day:Int, _ month:Int, _ year:Int) -> Bool {
+    var result:Bool = true
+    
+    if year < 1 {
+        result = false
+    }
+    if month < 1 || month > 12 {
+        result = false
+    }
+    if !(day >= 1 && day <= soNgayTrongThang(month, year)) {
+        result = false
+    }
+    return result
+}
+
+func timNgayHomTruoc(_ day:Int, _ month:Int, _ year:Int) {
+    var ngay = day
+    var thang = month
+    var nam = year
+    
+    ngay -= 1
+    if ngay == 0 {
+        thang -= 1
+        if thang == 0 {
+            thang = 12
+            nam -= 1
+        }
+        ngay = soNgayTrongThang(thang, nam)
+    }
+    print("Ngày trước đó là \(ngay)|\(thang)|\(nam)")
+}
+
+func timNgayHomSau(_ day:Int, _ month:Int, _ year:Int) {
+    var ngay = day
+    var thang = month
+    var nam = year
+    
+    ngay += 1
+    if ngay > soNgayTrongThang(thang, nam) {
+        ngay = 1
+        thang += 1
+        if thang > 12 {
+            thang = 1
+            nam += 1
+        }
+    }
+    print("Ngày sau đó là \(ngay)|\(thang)|\(nam)")
+}
+
 func timNgay() {
     print("Mời nhập vào ngày:", terminator: " ")
     let dayStr = readLine()
@@ -53,94 +116,18 @@ func timNgay() {
     print("Mời nhập vào năm:", terminator: " ")
     let yearStr = readLine()
     
-    guard let dayStr = dayStr, let monthStr = monthStr, let yearStr = yearStr, let day = Int(dayStr), let month = Int(monthStr), let year = Int(yearStr) else {
+    guard let dayStrNew = dayStr, let monthStrNew = monthStr, let yearStrNew = yearStr, let day = Int(dayStrNew), let month = Int(monthStrNew), let year = Int(yearStrNew) else {
         print("Nhập sai! Mời nhập lại")
         timNgay()
         return
     }
     
-    switch month {
-    case 1, 3, 5, 7, 8, 10, 12:
-        print("Tháng \(month) có 31 ngày")
-        
-        switch day {
-        case 2...30:
-            print("Ngày trước đó là ngày \(day - 1)")
-            print("Ngày sau đó là ngày \(day + 1)")
-        case 1:
-            if month == 8 || month == 1 {
-                print("Ngày trước đó là ngày 31")
-            } else if month == 3 {
-                if isLeapYear(year) {
-                    print("Ngày trước đó là ngày 29")
-                } else {
-                    print("Ngày trước đó là ngày 28")
-                }
-            } else {
-                print("Ngày trước đó là ngày 30")
-            }
-            print("Ngày sau đó là ngày \(day + 1)")
-        case 31:
-            print("Ngày trước đó là ngày \(day - 1)")
-            print("Ngày sau đó là ngày 1")
-        default:
-            print("Ngày không hợp lệ")
-        }
-        
-    case 4, 6, 9, 11:
-        print("Tháng \(month) có 30 ngày")
-        
-        switch day {
-        case 2...29:
-            print("Ngày trước đó là ngày \(day - 1)")
-            print("Ngày sau đó là ngày \(day + 1)")
-        case 1:
-            print("Ngày trước đó là ngày 31")
-            print("Ngày sau đó là ngày \(day + 1)")
-        case 30:
-            print("Ngày trước đó là ngày \(day - 1)")
-            print("Ngày sau đó là ngày 1")
-        default:
-            print("Ngày không hợp lệ")
-        }
-        
-    case 2:
-        if isLeapYear(year) {
-            print("Tháng \(month) có 29 ngày")
-            
-            switch day {
-            case 2...28:
-                print("Ngày trước đó là ngày \(day - 1)")
-                print("Ngày sau đó là ngày \(day + 1)")
-            case 1:
-                print("Ngày trước đó là ngày 31")
-                print("Ngày sau đó là ngày \(day + 1)")
-            case 29:
-                print("Ngày trước đó là ngày \(day - 1)")
-                print("Ngày sau đó là ngày 1")
-            default:
-                print("Ngày không hợp lệ")
-            }
-        } else {
-            print("Tháng \(month) có 28 ngày")
-            
-            switch day {
-            case 2...27:
-                print("Ngày trước đó là ngày \(day - 1)")
-                print("Ngày sau đó là ngày \(day + 1)")
-            case 1:
-                print("Ngày trước đó là ngày 31")
-                print("Ngày sau đó là ngày \(day + 1)")
-            case 28:
-                print("Ngày trước đó là ngày \(day - 1)")
-                print("Ngày sau đó là ngày 1")
-            default:
-                print("Ngày không hợp lệ")
-            }
-        }
-    default:
-        print("Nhập sai tháng")
+    if hopLe(day, month, year) {
+        print("Tháng \(month) có \(soNgayTrongThang(month, year))")
+        timNgayHomTruoc(day, month, year)
+        timNgayHomSau(day, month, year)
     }
+    
 }
 
 timNgay()
@@ -150,7 +137,7 @@ timNgay()
 func miniGame() {
     print("Mời bạn nhập 1 số bất kì trong khoảng từ 1 đến 100:", terminator: " ")
     let optionStr = readLine()
-    guard let optionStr = optionStr, let option = Int(optionStr) else {
+    guard let optionStrNew = optionStr, let option = Int(optionStrNew) else {
         return
     }
     
