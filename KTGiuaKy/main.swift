@@ -34,7 +34,7 @@ func veHCN() {
     }
 }
 
-veHCN()
+//veHCN()
 
 // MARK: -Bài 2:
 
@@ -130,7 +130,7 @@ func timNgay() {
     
 }
 
-timNgay()
+//timNgay()
 
 //MARK: - Bài 3:
 
@@ -152,4 +152,52 @@ func miniGame() {
     }
 }
 
-miniGame()
+//miniGame()
+
+// MARK: Tìm số Armstrong
+
+func countDigit(_ num:Int) -> Int {
+    var newNum = num
+    var count = 0
+    
+    while newNum > 0 {
+        newNum /= 10
+        count += 1
+    }
+    
+    return count
+}
+
+func isArmstrong(_ num:Int) -> Bool {
+    var number = num
+    let count = countDigit(number)
+    var sum:Double = 0
+    var lastDigit:Int
+    
+    while number > 0 {
+        lastDigit = number % 10
+        number /= 10
+        sum += pow(Double(lastDigit), Double(count))
+    }
+    if Int(sum) == num {
+        return true
+    }
+    return false
+}
+
+func timSoArmstrong() {
+    print("Mời nhập 1 số:", terminator: " ")
+    let numSTr = readLine()
+    
+    guard let newNumStr = numSTr, let num = Int(newNumStr) else {
+        return
+    }
+    print("Các số Armstrong nhỏ hơn \(num) là:")
+    for i in 0...num {
+        if isArmstrong(i) {
+            print(i)
+        }
+    }
+}
+
+timSoArmstrong()
